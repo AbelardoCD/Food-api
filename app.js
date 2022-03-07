@@ -9,6 +9,13 @@ const Auth= require("./Auth")
 const auth = new Auth();
 app.use(express.json({extended:true}));
 
+const cors = require("cors");
+const corsOptions = {
+  origin: "http://localhost:19006",
+  credentials: true, //access-control-allow-credentials:true
+  optionSuccessStatus: 200,
+};
+app.use(cors(corsOptions));
 app.post("/api/login",(req,res)=>{
     
     auth.login(req,res)
