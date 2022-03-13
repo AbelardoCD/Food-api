@@ -4,7 +4,7 @@ const app = express();
 const Auth= require("./Auth") 
 const User = require("./user/User");
 const ValidateToken = require("./ValidateToken")
-
+const Restaurants = require("./restaurants/Restaurants");
 
 
 const auth = new Auth();
@@ -13,6 +13,7 @@ app.use(express.json({extended:true}));
 const cors = require("cors");
 
 const user = new User();
+const restaurant = new Restaurants();
 const validateToken = new ValidateToken();
 
 const corsOptions = {
@@ -41,10 +42,44 @@ app.post("/api/user/create",verifyToken,(req,res)=>{
     })
   
 })
+app.get("/api/user/list",verifyToken,(req,res)=>{
+    
+    jwt.verify(req.token,'secretKey',(error,authData)=>{
 
+        if(error){
+            res.sendStatus(403);
+        }else{
+            user.usersList(req,res)
+        }
+    })
+  
+})
+app.post("/api/restaurant/createrRestaurant",verifyToken,(req,res)=>{
+    jwt.verify(req.token,'secretKey',(error,authData)=>{
 
+        if(error){
+            res.sendStatus(403);
 
+        }else{
+            restaurant.createRestaurant(req,res)
 
+        }
+    })
+  
+})
+
+app.get("/api/restaurant/list",verifyToken,(req,res)=>{
+    
+    jwt.verify(req.token,'secretKey',(error,authData)=>{
+
+        if(error){
+            res.sendStatus(403);
+        }else{
+            restaurant.restaurantsList(req,res)
+        }
+    })
+  
+})
 
 app.post("/api/posts",verifyToken,(req,res)=>{
     
