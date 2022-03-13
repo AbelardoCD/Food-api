@@ -2,7 +2,8 @@ const express = require("express")
 const jwt = require("jsonwebtoken");
 const app = express();
 const Auth= require("./Auth") 
-
+const User = require("./user/User");
+const ValidateToken = require("./ValidateToken")
 
 
 
@@ -10,15 +11,34 @@ const auth = new Auth();
 app.use(express.json({extended:true}));
 
 const cors = require("cors");
+
+const user = new User();
+const validateToken = new ValidateToken();
+
 const corsOptions = {
   origin: "http://localhost:19006",
   credentials: true, //access-control-allow-credentials:true
   optionSuccessStatus: 200,
 };
 app.use(cors(corsOptions));
+
 app.post("/api/login",(req,res)=>{
     
     auth.login(req,res)
+  
+})
+
+app.post("/api/user/create",verifyToken,(req,res)=>{
+    jwt.verify(req.token,'secretKey',(error,authData)=>{
+
+        if(error){
+            res.sendStatus(403);
+
+        }else{
+            user.createUser(req,res)
+
+        }
+    })
   
 })
 

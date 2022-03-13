@@ -1,5 +1,5 @@
 const { Client } = require('pg');
-const { password } = require('pg/lib/defaults');
+
 const Conection = require('./Conection');
 const jwt = require("jsonwebtoken");
 
@@ -9,8 +9,8 @@ module.exports = class Auth{
    async login(req,res){
     
         this.client.connect();
-       console.log(req.body.params);
-        this.client.query(`SELECT * FROM users where user_name = '${req.body.params.name}' and password = '${req.body.params.password}'`)
+       
+        this.client.query(`SELECT * FROM users where user_name = '${req.body.name}' and password = '${req.body.password}'`)
         .then((resp)=>{
             const  userObject ={
                 name:'',
